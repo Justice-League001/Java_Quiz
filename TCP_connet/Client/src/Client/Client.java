@@ -8,19 +8,17 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class client {
-	private byte buffer[]=new byte[10];
-	private Socket sck;
+public class Client {
 	private OutputStream os;
 	private InputStream is;
+	private Socket sck;
 	
-	void socketconnet(String ip,int port) {
-		while(sck==null) {
-		try {	
+	private void socketconnet(String ip,int port) {
+		try {
 			sck=new Socket(ip,port);
+			System.out.println("连接建立");
 			os=sck.getOutputStream();
-			is=sck.getInputStream();
-					
+			//is=sck.getInputStream();				
 		} catch (UnknownHostException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
@@ -28,37 +26,39 @@ public class client {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		}
-	 }
-    }	
-	void File_read_send(String file) {
-		try {
-			FileInputStream fr=new FileInputStream(file);
+    }
+	private void file_read_send(String file) {
+		byte buffer[]=new byte[32];		
+		try (FileInputStream fr=new FileInputStream(file)){
 			while(fr.read(buffer)!=-1) {
 			os.write(buffer);
 			}
+			System.out.println("文件已发送");
+			fr.close();		
 		} catch (FileNotFoundException e) {
-			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO 自动生成的 catch 块
 			e.printStackTrace();
+		}finally {
+			System.out.println("文件已关闭");
 		}
 	}
-	void Socket_close() {
+	private void socket_close() {
 		try {
 			sck.close();
+			System.out.println("连接断开");
 		} catch (IOException e) {
-			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		}
 	}
 	public static void main(String[] args) {
-		client c=new client();
+		Client c=new Client();
 		//System.out.println("输入ip：");
-		c.socketconnet("192.168.101.3",1820);
 		//System.out.println("输入port：");
-		c.File_read_send("C:\\Users\\asus\\Desktop\\123.txt");
-		c.Socket_close();
+		
+		c.socketconnet("192.168.101.3",1820);	
+		c.file_read_send("C:\\Users\\asus\\Desktop\\123.txt");
+		c.socket_close();
 	}
 
 }
