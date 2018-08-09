@@ -24,7 +24,7 @@ public class Server {
 		 }
 	 }
 	 void Fileread_write(String file) {
-		 byte buffer[]=new byte[32];
+		 byte buffer[]=new byte[16];
 		 try (FileOutputStream fr=new FileOutputStream(file)){
 			System.out.println("已创建文件开始读写");
 			while(is.read(buffer)!=-1) {

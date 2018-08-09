@@ -1,4 +1,3 @@
-package Client;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,7 +27,7 @@ public class Client {
 		}
     }
 	private void file_read_send(String file) {
-		byte buffer[]=new byte[32];		
+		byte buffer[]=new byte[16];		
 		try (FileInputStream fr=new FileInputStream(file)){
 			while(fr.read(buffer)!=-1) {
 			os.write(buffer);
