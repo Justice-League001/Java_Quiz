@@ -17,19 +17,21 @@ public class Server {
 			
 			System.out.println("开始监听端口");
 			
+			
 			String info;
-			while(is.ready()==true) {
+			while(is.ready()) {
 			while((info=is.readLine())!=null) {
 				System.out.println(info);
 			}}
 			
+			info="这里是服务端\n";
 			System.out.println("开始发送信息");
-			os.write("这里是服务端");
+			
+			os.write(info);
+			os.newLine();
 			os.flush();
 			
-			//os.close();
-			sck.shutdownOutput();
-			
+			sck.close();S
 			System.out.println("结束");
 		} catch (IOException e) {
 			// TODO 自动生成的 catch 块
