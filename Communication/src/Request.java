@@ -45,15 +45,15 @@ public class Request {
 			while(GoOn) {
 				System.out.println("输入短信(quit to EOF):");
 				;
-				if(!(GoOn=send(enterStr(),os))) break;
+				if(!(GoOn=Send(EnterStr(),os))) break;
 				System.out.print(sck.getInetAddress()+":"+sck.getPort()+"：");
-				GoOn=receive(is);
+				GoOn=Receive(is);
 			}
 			
-			send("连接中断",os);
-			receive(is);
+			Send("连接中断",os);
+			Receive(is);
 			
-		
+		 
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -67,21 +67,21 @@ public class Request {
 			}
 		}
 	}
-	private boolean send(String info,BufferedWriter os) throws IOException  { 
+	private boolean Send(String info,BufferedWriter os) throws IOException  { 
 			os.write(info);
 			os.newLine();
 			os.flush();
 		    if(info.equals("EOF")) return false;
 		    return true;
 	}
-	private boolean receive(BufferedReader is) throws IOException{	
+	private boolean Receive(BufferedReader is) throws IOException{	
 			String info;
 			info=is.readLine();
 			System.out.println(info);
 			if(info.equals("EOF")) return false;
 			return true;
 	}
-	private String enterStr() {
+	private String EnterStr() {
 		Scanner read=new Scanner(System.in);
 		String LineStr="EOF";
 		if(read.hasNextLine()) LineStr=read.nextLine();
