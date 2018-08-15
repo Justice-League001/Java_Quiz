@@ -58,12 +58,15 @@ public class FileTransfer {
 	}
 	private long SendFile(OutputStream os,InputStream is) throws IOException {
 		
-		int b=-1;
-		long totalBytesSend=0;
-		while((b=is.read())!=-1) {
+		int b = -1;
+		long totalBytesSend = 0;
+		while((b = is.read()) != -1) {
+			System.out.println(b);
 			os.write(b);
 			totalBytesSend++;
 		}
+		System.out.println(b);
+		os.write(b);
 		os.flush();
 		return totalBytesSend; 
 	}

@@ -61,13 +61,22 @@ public class FileReceive {
 	private long ReceiveFile(OutputStream os,InputStream is) throws IOException {
 		int b=-1;
 		long totalBytesReceive=0;
-		while(totalBytesReceive != 607) {
-			b=is.read();
+
+		
+		while((b = is.read()) != -1) {
+			System.out.println(b);
 			os.write(b);
 			totalBytesReceive++;
 		}
 		os.flush();
-		return totalBytesReceive;
+		return totalBytesReceive; 
+//		while(totalBytesReceive != 607) {
+//		b=is.read();
+//		os.write(b);
+//		totalBytesReceive++;
+//	}
+//	os.flush();
+//	return totalBytesReceive;
 	}
 	private void InfoSend(PrintWriter write,String info) {
 		write.println(info);
