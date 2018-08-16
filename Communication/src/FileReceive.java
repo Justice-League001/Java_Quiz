@@ -10,38 +10,45 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class FileReceive {
-	private final File LOCAL_FILE;
-	private String TARGET_IP;
+	private Path SaveDirPath;
 	private final int LOCAL_PORT;
 	
+	
+	
 	FileReceive(int PORT,String PATH){
-			LOCAL_FILE = new File(PATH);
+			SaveDirPath = Paths.get(PATH);
 			LOCAL_PORT = PORT;
 	}	
 	public void start() {
 		try (ServerSocket connection = new ServerSocket(LOCAL_PORT);
 			 Socket remote = connection.accept();
-			 InputStream fileIn = new BufferedInputStream(remote.getInputStream());
-			 OutputStream fileOut = new BufferedOutputStream(new FileOutputStream(LOCAL_FILE));
+			 InputStream fileIn = new BufferedInputStream(remote.getInputStream());	 
 			 BufferedReader infoRead = new BufferedReader(new InputStreamReader(remote.getInputStream()));
 			 PrintWriter infoWrite = new PrintWriter(remote.getOutputStream())){
 			
+			System.out.println("IS_CONNECTED\t:"+remote.isConnected());
+			System.out.println("[LOCAL_IP\t]:"+remote.getLocalAddress());
+			System.out.println("[LOCAL_PORT\t]:"+LOCAL_PORT);
+			System.out.println("[LOCAL_NAME\t]:"+remote.getLocalAddress().getHostName());
+			System.out.println("[TARGET_IP\t]:"+remote.getInetAddress());
+			System.out.println("[TARGET_PORT\t]:"+remote.getPort());
+			System.out.println("[TARGET_NAME\t]:"+remote.getInetAddress().getHostName());
+			
+			
 			if(InfoComfirm(infoRead, infoWrite)){
-				System.out.println("开始接收文件");
-				long totalBytesReceive = ReceiveFile(fileOut, fileIn);
+				System.out.println("Info_Comfirm_\t:1");
 				
-				InfoSend(infoWrite,totalBytesReceive+"");
-				long totalBytesSend = Long.parseLong(InfoReceive(infoRead));
+				long totalBytesReceive = ReceiveFile(fileIn);		
 				
-				System.out.println("已接收"+totalBytesReceive+"字节");
-				System.out.println("IP:"+remote.getInetAddress()
-						+":"+remote.getPort()+":"+"已发送"+totalBytesSend+"字节");
+				System.out.println("已接收"+totalBytesReceive+"次");
 				}
 			else 
-				System.out.println("拒绝接收文件");
+				System.out.println("Info_Comfirm_\t:0");
 				
 		} catch (IOException e) {
 			// TODO 自动生成的 catch 块
@@ -50,33 +57,34 @@ public class FileReceive {
 	}
     private boolean InfoComfirm(BufferedReader infoRead, PrintWriter infoWrite) throws IOException{
 		
-    	System.out.println("接收文件信息");
-    	System.out.println(InfoReceive(infoRead));
-		
+    	System.out.println("\n\tInfo_Comfirm_Receive\n");
+ 
+    	String str = InfoReceive(infoRead);
+    	SaveDirPath = SaveDirPath.resolve(str);
+    	
+    	System.out.println("File_Name:"+str);
+    	System.out.println("File_Size:"+InfoReceive(infoRead)+"times");
+    	
+    	System.out.print("FileComfirm(Receive to Y):");
+    	
 		String info = EnterStr();
 		InfoSend(infoWrite,info);
 		info = info.equals("Y") ? "1" : "0"; 
 		return info.equals("1") ? true : false; 
 	}
-	private long ReceiveFile(OutputStream os,InputStream is) throws IOException {
-		int b=-1;
-		long totalBytesReceive=0;
-
+	private long ReceiveFile(InputStream is) throws IOException {
+		int b = -1;
+		long totalBytesReceive = 0;
 		
+		OutputStream os = new BufferedOutputStream(new FileOutputStream(SaveDirPath.toString()));
 		while((b = is.read()) != -1) {
-			System.out.println(b);
 			os.write(b);
 			totalBytesReceive++;
 		}
 		os.flush();
+		
+		os.close();
 		return totalBytesReceive; 
-//		while(totalBytesReceive != 607) {
-//		b=is.read();
-//		os.write(b);
-//		totalBytesReceive++;
-//	}
-//	os.flush();
-//	return totalBytesReceive;
 	}
 	private void InfoSend(PrintWriter write,String info) {
 		write.println(info);

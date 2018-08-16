@@ -28,20 +28,25 @@ public class FileTransfer {
 			BufferedReader infoRead = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			PrintWriter infoWrite = new PrintWriter(connection.getOutputStream())){
 			
-			System.out.println("成功连接");
+			
+			System.out.println("IS_CONNECTED_\t:"+connection.isConnected());
+			System.out.println("[LOCAL_IP\t]:"+connection.getLocalAddress());
+			System.out.println("[LOCAL_PORT\t]:"+connection.getLocalPort());
+			System.out.println("[LOCAL_NAME\t]:"+connection.getLocalAddress().getHostName());
+			System.out.println("[TARGET_IP\t]:"+connection.getInetAddress());
+			System.out.println("[TARGET_PORT\t]:"+connection.getPort());
+			System.out.println("[TARGET_NAME\t]:"+connection.getInetAddress().getHostName());
+			
+			
 			
 			if(InfoComfirm(infoRead, infoWrite)){
-				System.out.println("请求已确认");
+				System.out.println("Info_Comfirm_\t:1");
 				long totalBytesSend = SendFile(fileOut, fileIn);
-				
-				long totalBytesReceive = Long.parseLong(InfoReceive(infoRead));
-				System.out.println("已发送"+totalBytesSend+"字节");
-				System.out.println("IP:"+TARGET_IP+":"+TARGET_PORT+":"+"已接收"+totalBytesReceive+"字节");
-				
-				InfoSend(infoWrite, String.valueOf(totalBytesSend)); 
+						
+				System.out.println("Have_Sent\t:"+totalBytesSend+"times");		
 				}
 			else 
-				System.out.println("请求被拒绝");
+				System.out.println("Info_Comfirm_\t:0");
 			
 			
 		} catch (IOException e) {
@@ -50,8 +55,9 @@ public class FileTransfer {
 	}
 	private boolean InfoComfirm(BufferedReader infoRead, PrintWriter infoWrite) throws IOException{
 		
-		System.out.println("向对方发送文件确认");
-		InfoSend(infoWrite,"FileName:"+LOCAL_FILE.getName()+"  FileSize:"+LOCAL_FILE.length());
+		System.out.println("\n\tInfo_Comfirm_Send");
+		InfoSend(infoWrite,LOCAL_FILE.getName());
+		InfoSend(infoWrite,LOCAL_FILE.length()+"");
 		String info = InfoReceive(infoRead);
 		info = info.equals("Y") ? "1" : "0"; 
 		return info.equals("1") ? true : false; 
@@ -61,13 +67,11 @@ public class FileTransfer {
 		int b = -1;
 		long totalBytesSend = 0;
 		while((b = is.read()) != -1) {
-			System.out.println(b);
 			os.write(b);
 			totalBytesSend++;
 		}
-		System.out.println(b);
-		os.write(b);
 		os.flush();
+		is.close();
 		return totalBytesSend; 
 	}
 	private void InfoSend(PrintWriter write,String info) {

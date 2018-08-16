@@ -8,12 +8,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Server {
+public class MessageReceive {
 	
 	private ServerSocket ssck;
 	private Socket sck;
 	
-	public Server(int port) {
+	public MessageReceive(int port) {
 		try {
 			System.out.println("开始监听端口");
 			ssck = new ServerSocket(port);
@@ -25,7 +25,7 @@ public class Server {
 
 	}
 	
-	public void MessageRespond() {
+	public void start() {
 		try(BufferedReader is=new BufferedReader(new InputStreamReader(sck.getInputStream()));
 			BufferedWriter os = new BufferedWriter(new OutputStreamWriter(sck.getOutputStream()))){
 			
@@ -45,7 +45,7 @@ public class Server {
 				System.out.print(sck.getInetAddress()+":"+sck.getPort()+"：");
 				
 				if(!(GoOn=receive(is))) break;
-				System.out.println("输入短信(quit to EOF):");
+				System.out.println("Please Input Short Message(quit to EOF):");
 				GoOn=send(enterStr(),os);
 			}
 					

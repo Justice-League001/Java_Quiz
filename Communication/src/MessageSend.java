@@ -7,13 +7,13 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class Request {
+public class MessageSend {
 //	private static final int NETWORK_BUFFER_SIZE =  128 * 1024;
 //  private static final int DISK_BUFFER_SIZE = 64 * 1024;
 
 	private Socket sck;
 	
-	public Request(String ip, int port) {
+	public MessageSend(String ip, int port) {
 		try {
 			sck=new Socket(ip,port);		
 		} catch (UnknownHostException e) {
@@ -25,7 +25,7 @@ public class Request {
 		}
 	}
 	
-	public void MessageInitiator() {
+	public void start() {
 		
 		try(BufferedWriter os = new BufferedWriter(new OutputStreamWriter(sck.getOutputStream()));
 		BufferedReader is = new BufferedReader(new InputStreamReader(sck.getInputStream()))){
@@ -43,7 +43,7 @@ public class Request {
 			
 			boolean GoOn=true;
 			while(GoOn) {
-				System.out.println(" ‰»Î∂Ã–≈(quit to EOF):");
+				System.out.println("Please Input Short Message(quit to EOF):");
 				;
 				if(!(GoOn=Send(EnterStr(),os))) break;
 				System.out.print(sck.getInetAddress()+":"+sck.getPort()+"£∫");
