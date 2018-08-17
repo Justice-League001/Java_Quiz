@@ -1,11 +1,11 @@
 import java.util.Scanner;
 
 public class Client {
-	private static int Menu() {
+	private static String Menu() {
 		System.out.println("1.SendMessage\t                    \t2.ReceiveMessage\t");
 		System.out.println("3.FileSend\t                       \t4.FileReceive\t");
 		System.out.println("5.close\t");
-		return  Integer.parseInt(EnterStr());
+		return  EnterStr();
 	}
 	private static String InfoEnter(int m) {
 		if(m == 1) System.out.println("Please Input The IP Address(Enter to quit):");
@@ -24,7 +24,7 @@ public class Client {
 	public static void main(String[] args) {
 		boolean menu = true;
 		while(menu) {
-			switch(Menu()) {
+			switch(Integer.parseInt(Menu())) {
 			case 1:
 				new MessageSend(InfoEnter(1),185).start();
 				break;

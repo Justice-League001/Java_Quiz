@@ -20,7 +20,6 @@ public class FileTransfer {
 		TARGET_PORT = PORT;
 		TARGET_IP = IP;
 	}
-	
 	public void start() {
 		try(Socket connection = new Socket(TARGET_IP,TARGET_PORT);
 			InputStream fileIn = new BufferedInputStream(new FileInputStream(LOCAL_FILE));
@@ -43,7 +42,7 @@ public class FileTransfer {
 				System.out.println("Info_Comfirm_\t:1");
 				long totalBytesSend = SendFile(fileOut, fileIn);
 						
-				System.out.println("Have_Sent\t:"+totalBytesSend+"times");		
+				System.out.println("Have_Sent\t:"+totalBytesSend+"Bytes");		
 				}
 			else 
 				System.out.println("Info_Comfirm_\t:0");
@@ -59,17 +58,28 @@ public class FileTransfer {
 		InfoSend(infoWrite,LOCAL_FILE.getName());
 		InfoSend(infoWrite,LOCAL_FILE.length()+"");
 		String info = InfoReceive(infoRead);
-		info = info.equals("Y") ? "1" : "0"; 
+		info = info.toUpperCase().equals("Y") ? "1" : "0"; 
 		return info.equals("1") ? true : false; 
 	}
 	private long SendFile(OutputStream os,InputStream is) throws IOException {
 		
 		int b = -1;
 		long totalBytesSend = 0;
+		
+		long Times = LOCAL_FILE.length() / 36;
+		int k=0;
+		
 		while((b = is.read()) != -1) {
 			os.write(b);
 			totalBytesSend++;
+			if(totalBytesSend % Times == 0 && k<36) {
+				System.out.print("▋");
+				k++;
+			}
 		}
+		if(totalBytesSend / LOCAL_FILE.length() == 1) System.out.println("已上传100%");
+		else System.out.println("已上传100%\nWaring:文件大小不符");
+		
 		os.flush();
 		is.close();
 		return totalBytesSend; 

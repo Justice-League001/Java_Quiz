@@ -13,7 +13,7 @@ public class MessageSend {
 
 	private Socket sck;
 	
-	public MessageSend(String ip, int port) {
+	MessageSend(String ip, int port) {
 		try {
 			sck=new Socket(ip,port);		
 		} catch (UnknownHostException e) {
@@ -24,7 +24,6 @@ public class MessageSend {
 			e.printStackTrace();
 		}
 	}
-	
 	public void start() {
 		
 		try(BufferedWriter os = new BufferedWriter(new OutputStreamWriter(sck.getOutputStream()));
@@ -44,7 +43,7 @@ public class MessageSend {
 			boolean GoOn=true;
 			while(GoOn) {
 				System.out.println("Please Input Short Message(quit to EOF):");
-				;
+				
 				if(!(GoOn=Send(EnterStr(),os))) break;
 				System.out.print(sck.getInetAddress()+":"+sck.getPort()+"£º");
 				GoOn=Receive(is);

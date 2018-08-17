@@ -13,7 +13,7 @@ public class MessageReceive {
 	private ServerSocket ssck;
 	private Socket sck;
 	
-	public MessageReceive(int port) {
+	MessageReceive(int port) {
 		try {
 			System.out.println("¿ªÊ¼¼àÌý¶Ë¿Ú");
 			ssck = new ServerSocket(port);
@@ -24,7 +24,6 @@ public class MessageReceive {
 		}
 
 	}
-	
 	public void start() {
 		try(BufferedReader is=new BufferedReader(new InputStreamReader(sck.getInputStream()));
 			BufferedWriter os = new BufferedWriter(new OutputStreamWriter(sck.getOutputStream()))){

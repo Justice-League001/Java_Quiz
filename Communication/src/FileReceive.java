@@ -17,8 +17,7 @@ import java.util.Scanner;
 public class FileReceive {
 	private Path SaveDirPath;
 	private final int LOCAL_PORT;
-	
-	
+	private long FILE_SIZE;
 	
 	FileReceive(int PORT,String PATH){
 			SaveDirPath = Paths.get(PATH);
@@ -45,7 +44,7 @@ public class FileReceive {
 				
 				long totalBytesReceive = ReceiveFile(fileIn);		
 				
-				System.out.println("已接收"+totalBytesReceive+"次");
+				System.out.println("Have_Receive\t:"+totalBytesReceive+"Bytes");	
 				}
 			else 
 				System.out.println("Info_Comfirm_\t:0");
@@ -62,28 +61,41 @@ public class FileReceive {
     	String str = InfoReceive(infoRead);
     	SaveDirPath = SaveDirPath.resolve(str);
     	
-    	System.out.println("File_Name:"+str);
-    	System.out.println("File_Size:"+InfoReceive(infoRead)+"times");
+    	System.out.println("File_Name:"+str); 
+    	System.out.println("File_Size:"+(FILE_SIZE = Long.parseLong(InfoReceive(infoRead)))+"times");
     	
-    	System.out.print("FileComfirm(Receive to Y):");
+    	System.out.print("FileComfirm(Receive to (y or Y):");
     	
 		String info = EnterStr();
 		InfoSend(infoWrite,info);
-		info = info.equals("Y") ? "1" : "0"; 
+		info = info.toUpperCase().equals("Y") ? "1" : "0"; 
 		return info.equals("1") ? true : false; 
 	}
 	private long ReceiveFile(InputStream is) throws IOException {
 		int b = -1;
 		long totalBytesReceive = 0;
 		
+		long Times = FILE_SIZE / 36;
+		int k=0;
+
+		
 		OutputStream os = new BufferedOutputStream(new FileOutputStream(SaveDirPath.toString()));
 		while((b = is.read()) != -1) {
 			os.write(b);
 			totalBytesReceive++;
+			
+			if(totalBytesReceive % Times == 0 && k<36) {
+				System.out.print("▋");
+				k++;
+			}
 		}
-		os.flush();
+		if(totalBytesReceive / FILE_SIZE == 1) System.out.println("已下载100%");
+		else System.out.println("已下载100%\nWaring:文件大小不符");
 		
+		os.flush();
 		os.close();
+
+					
 		return totalBytesReceive; 
 	}
 	private void InfoSend(PrintWriter write,String info) {
