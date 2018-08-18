@@ -14,7 +14,6 @@ public class FileTransfer {
 	private final File LOCAL_FILE;
 	private final String TARGET_IP;
 	private final int TARGET_PORT;
-	
 	FileTransfer(String IP,int PORT,String PATH){
 		LOCAL_FILE = new File(PATH);
 		TARGET_PORT = PORT;
@@ -29,12 +28,12 @@ public class FileTransfer {
 			PrintWriter infoWrite = new PrintWriter(connection.getOutputStream())){
 					
 			System.out.println("IS_CONNECTED_\t:"+connection.isConnected());
-			System.out.println("[LOCAL_IP\t]:"+connection.getLocalAddress());
-			System.out.println("[LOCAL_PORT\t]:"+connection.getLocalPort());
-			System.out.println("[LOCAL_NAME\t]:"+connection.getLocalAddress().getHostName());
-			System.out.println("[TARGET_IP\t]:"+connection.getInetAddress());
-			System.out.println("[TARGET_PORT\t]:"+connection.getPort());
-			System.out.println("[TARGET_NAME\t]:"+connection.getInetAddress().getHostName());
+			System.out.println("[LOCAL_IP   ]:"+connection.getLocalAddress());
+			System.out.println("[LOCAL_PORT ]:"+connection.getLocalPort());
+			System.out.println("[LOCAL_NAME ]:"+connection.getLocalAddress().getHostName());
+			System.out.println("[TARGET_IP  ]:"+connection.getInetAddress());
+			System.out.println("[TARGET_PORT]:"+connection.getPort());
+			System.out.println("[TARGET_NAME]:"+connection.getInetAddress().getHostName());
 			
 			
 			
@@ -48,7 +47,7 @@ public class FileTransfer {
 						,totalBytesSend,timeUsed,((double)totalBytesSend/1000.)/timeUsed);
 				}
 			else 
-				System.out.println("Info_Comfirm_\t:0");
+				System.out.println("Info_Comfirm_:0");
 			
 			
 		} catch (IOException e) {
@@ -75,11 +74,14 @@ public class FileTransfer {
 		while((b = is.read()) != -1) {
 			os.write(b);
 			totalBytesSend++;
-			if(totalBytesSend % Times == 0 && k<36) {
+			
+			if(Times == 0 || totalBytesSend % Times == 0 && k<30) {
 				System.out.print("▋");
 				k++;
 			}
 		}
+		
+		for(; k<30; k++) System.out.print("▋");
 		if(totalBytesSend / LOCAL_FILE.length() == 1) System.out.println("已上传100%");
 		else System.out.println("已上传100%\nWaring:文件大小不符");
 		

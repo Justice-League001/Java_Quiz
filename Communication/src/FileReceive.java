@@ -31,17 +31,17 @@ public class FileReceive {
 			 PrintWriter infoWrite = new PrintWriter(remote.getOutputStream())){
 			
 			
-			System.out.println("IS_CONNECTED\t:"+remote.isConnected());
-			System.out.println("[LOCAL_IP\t]:"+remote.getLocalAddress());
-			System.out.println("[LOCAL_PORT\t]:"+LOCAL_PORT);
-			System.out.println("[LOCAL_NAME\t]:"+remote.getLocalAddress().getHostName());
-			System.out.println("[TARGET_IP\t]:"+remote.getInetAddress());
-			System.out.println("[TARGET_PORT\t]:"+remote.getPort());
-			System.out.println("[TARGET_NAME\t]:"+remote.getInetAddress().getHostName());
+			System.out.println("IS_CONNECTED:"+remote.isConnected());
+			System.out.println("[LOCAL_IP   ]:"+remote.getLocalAddress());
+			System.out.println("[LOCAL_PORT ]:"+LOCAL_PORT);
+			System.out.println("[LOCAL_NAME ]:"+remote.getLocalAddress().getHostName());
+			System.out.println("[TARGET_IP  ]:"+remote.getInetAddress());
+			System.out.println("[TARGET_PORT]:"+remote.getPort());
+			System.out.println("[TARGET_NAME]:"+remote.getInetAddress().getHostName());
 			
 			
 			if(InfoComfirm(infoRead, infoWrite)){
-				System.out.println("Info_Comfirm_\t:1");
+				System.out.println("Info_Comfirm_:1");
 				
 				double timeUsed = System.currentTimeMillis();
 				long totalBytesReceive = ReceiveFile(fileIn);		
@@ -51,7 +51,7 @@ public class FileReceive {
 						,totalBytesReceive,timeUsed,((double)totalBytesReceive/1000.)/timeUsed);
 				}
 			else 
-				System.out.println("Info_Comfirm_\t:0");
+				System.out.println("Info_Comfirm_:0");
 				
 		} catch (IOException e) {
 			// TODO 自动生成的 catch 块
@@ -66,7 +66,7 @@ public class FileReceive {
     	SaveDirPath = SaveDirPath.resolve(str);
     	
     	System.out.println("File_Name:"+str); 
-    	System.out.println("File_Size:"+(FILE_SIZE = Long.parseLong(InfoReceive(infoRead)))+"times");
+    	System.out.println("File_Size:"+(FILE_SIZE = Long.parseLong(InfoReceive(infoRead)))+" Bytes");
     	
     	System.out.print("FileComfirm(Receive to (y or Y):");
     	
@@ -79,7 +79,7 @@ public class FileReceive {
 		int b = -1;
 		long totalBytesReceive = 0;
 		
-		long Times = FILE_SIZE / 36;
+		long Times = FILE_SIZE / 36 ; 
 		int k=0;
 
 		
@@ -88,11 +88,12 @@ public class FileReceive {
 			os.write(b);
 			totalBytesReceive++;
 			
-			if(totalBytesReceive % Times == 0 && k<36) {
+			if(Times == 0 || totalBytesReceive % Times == 0 && k<36 ) {
 				System.out.print("▋");
 				k++;
 			}
 		}
+		for(; k<30; k++) System.out.print("▋");
 		if(totalBytesReceive / FILE_SIZE == 1) System.out.println("已下载100%");
 		else System.out.println("已下载100%\nWaring:文件大小不符");
 		
