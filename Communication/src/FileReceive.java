@@ -1,7 +1,6 @@
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +21,7 @@ public class FileReceive {
 	FileReceive(int PORT,String PATH){
 			SaveDirPath = Paths.get(PATH);
 			LOCAL_PORT = PORT;
+			System.out.println("Start listening port:"+PORT+"...");
 	}	
 	public void start() {
 		try (ServerSocket connection = new ServerSocket(LOCAL_PORT);
@@ -29,6 +29,7 @@ public class FileReceive {
 			 InputStream fileIn = new BufferedInputStream(remote.getInputStream());	 
 			 BufferedReader infoRead = new BufferedReader(new InputStreamReader(remote.getInputStream()));
 			 PrintWriter infoWrite = new PrintWriter(remote.getOutputStream())){
+			
 			
 			System.out.println("IS_CONNECTED\t:"+remote.isConnected());
 			System.out.println("[LOCAL_IP\t]:"+remote.getLocalAddress());
@@ -42,9 +43,12 @@ public class FileReceive {
 			if(InfoComfirm(infoRead, infoWrite)){
 				System.out.println("Info_Comfirm_\t:1");
 				
+				double timeUsed = System.currentTimeMillis();
 				long totalBytesReceive = ReceiveFile(fileIn);		
+				timeUsed = (System.currentTimeMillis()-timeUsed)/1000;
 				
-				System.out.println("Have_Receive\t:"+totalBytesReceive+"Bytes");	
+				System.out.printf("Have_Receive\t:%d Bytes\nTime Used\t:%f Sec\nAverage Speed\t:%f KB/S\n"
+						,totalBytesReceive,timeUsed,((double)totalBytesReceive/1000.)/timeUsed);
 				}
 			else 
 				System.out.println("Info_Comfirm_\t:0");

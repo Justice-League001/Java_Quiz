@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class Client {
 	private static String Menu() {
+		System.out.println();
 		System.out.println("1.SendMessage\t                    \t2.ReceiveMessage\t");
 		System.out.println("3.FileSend\t                       \t4.FileReceive\t");
 		System.out.println("5.close\t");

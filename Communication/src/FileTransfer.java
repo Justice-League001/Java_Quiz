@@ -19,6 +19,7 @@ public class FileTransfer {
 		LOCAL_FILE = new File(PATH);
 		TARGET_PORT = PORT;
 		TARGET_IP = IP;
+		System.out.println("Start connect...");
 	}
 	public void start() {
 		try(Socket connection = new Socket(TARGET_IP,TARGET_PORT);
@@ -26,8 +27,7 @@ public class FileTransfer {
 			OutputStream fileOut = new BufferedOutputStream(connection.getOutputStream());
 			BufferedReader infoRead = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			PrintWriter infoWrite = new PrintWriter(connection.getOutputStream())){
-			
-			
+					
 			System.out.println("IS_CONNECTED_\t:"+connection.isConnected());
 			System.out.println("[LOCAL_IP\t]:"+connection.getLocalAddress());
 			System.out.println("[LOCAL_PORT\t]:"+connection.getLocalPort());
@@ -40,9 +40,12 @@ public class FileTransfer {
 			
 			if(InfoComfirm(infoRead, infoWrite)){
 				System.out.println("Info_Comfirm_\t:1");
+				double timeUsed = System.currentTimeMillis();
 				long totalBytesSend = SendFile(fileOut, fileIn);
-						
-				System.out.println("Have_Sent\t:"+totalBytesSend+"Bytes");		
+				timeUsed = (System.currentTimeMillis()- timeUsed) / 1000;
+				
+				System.out.printf("Have_Sent\t:%dBytes\nTime Used\t:%f Sec\nAverage Speed\t:%f KB/S\n"
+						,totalBytesSend,timeUsed,((double)totalBytesSend/1000.)/timeUsed);
 				}
 			else 
 				System.out.println("Info_Comfirm_\t:0");
