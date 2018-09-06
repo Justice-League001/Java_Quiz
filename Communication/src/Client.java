@@ -49,3 +49,8 @@ public class Client {
 	}
 
 }
+class targetInfo{
+	String IP;
+	int PORT;
+	String hostName;
+}
