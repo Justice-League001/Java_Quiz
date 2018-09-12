@@ -79,15 +79,17 @@ public class FileTransferThread<V> implements Callable<V> {
 	}
     private boolean InfoComfirm(BufferedReader infoRead, PrintWriter infoWrite) throws IOException{	
     	
-		InfoSend(infoWrite,(((FileMsg) info.MSG)).getFileName());
-		InfoSend(infoWrite,(((FileMsg) info.MSG)).getFileSize()+"");
+		InfoSend(infoWrite,(((FileMsg) info.MSG)).FileName);
+		InfoSend(infoWrite,(((FileMsg) info.MSG)).FileSize+"");
 		
 		String msg = InfoReceive(infoRead);
 		
-		sendInfo(new Info(info.IP, info.PORT, info.NAME, info.PID, msg, true));
+		info.STATE = msg.toUpperCase().equals("Y") ? true : false;
 		
-		msg = msg.toUpperCase().equals("Y") ? "1" : "0"; 
-		return info.equals("1") ? true : false; 
+		sendInfo(info);
+		
+		
+		return info.STATE; 
 	}
     private long SendFile(OutputStream os,InputStream is) throws IOException {	
     	int b = -1;

@@ -2,7 +2,8 @@ package com.jhzhou.util;
 
 
 public class Info {
-	public final String IP,NAME;
+	public final String IP;
+	public String NAME;
 	public final int PORT;
 	public final int PID;
 	public Object MSG;
@@ -22,7 +23,7 @@ public class Info {
         int result = 1;
         result = prime * result + PID;
         result = prime * result + PORT;
-    	return IP.hashCode()+NAME.hashCode()+result;
+    	return IP.hashCode()+result;
     }
  
     @Override
@@ -39,8 +40,6 @@ public class Info {
         if (PORT != other.PORT)
             return false;
         if(IP.equals(other.IP)==false) 	
-        	return false;
-        if(NAME.equals(other.NAME)==false) 	
         	return false;
         return true;
     }

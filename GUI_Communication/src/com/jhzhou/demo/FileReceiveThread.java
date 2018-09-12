@@ -28,15 +28,19 @@ public class FileReceiveThread<V> implements Callable<V> {
 	private Info info;
 	private final Queue<Info> WarehouseInput;
 	Map<Info, SynchronousQueue<Info>>WarehouseOutput;
-	private final Exchanger<Info> exchanger;
+	private final Queue<Info> ThreadRequest;
 	private final ServerSocket connection;
 	                                      
 	public FileReceiveThread                                         
-	(ServerSocket connection, Queue<Info> WarehouseInput, Map<Info, SynchronousQueue<Info>>   WarehouseOutput){
+	(ServerSocket connection, 
+	 Queue<Info> WarehouseInput, 
+	 Map<Info, 
+	 SynchronousQueue<Info>> WarehouseOutput, 
+	 Queue<Info> ThreadRequest){
 		this.connection = connection;
 		this.WarehouseOutput = WarehouseOutput;
 		this.WarehouseInput = WarehouseInput;
-		exchanger = new Exchanger();
+		this.ThreadRequest = ThreadRequest;
 	}
 	
 	private void sendInfo(Info msg) {
@@ -53,7 +57,8 @@ public class FileReceiveThread<V> implements Callable<V> {
 			 PrintWriter infoWrite = new PrintWriter(remote.getOutputStream());
 			 BufferedReader infoRead = new BufferedReader(
 					                   new InputStreamReader(remote.getInputStream()))){
-			exchanger.exchange(new Info(null, 0, null, 0, null, true));
+			
+			ThreadRequest.add(new Info("", 0, null, 0, null, true));
 			
 			info = new Info(remote.getInetAddress().getHostAddress(),
 					remote.getPort(),

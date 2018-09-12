@@ -18,14 +18,14 @@ import com.jhzhou.util.Info;
 public class MsgReceiveThread<V> implements Callable<V> {
 	private Info info;
 	private final Queue<Info> WarehouseInput;
-	private final Exchanger<Info> exchanger;
 	private final ServerSocket connection;
+	private final Queue<Info> ThreadRequest;
 	
 	public MsgReceiveThread
-	(ServerSocket connection,  Queue<Info> WarehouseInput) {
+	(ServerSocket connection,  Queue<Info> WarehouseInput, Queue<Info> ThreadRequest) {
 		this.connection = connection;
 		this.WarehouseInput = WarehouseInput;
-		exchanger = new Exchanger();
+		this.ThreadRequest = ThreadRequest;
 	}
 	private void sendInfo(Info msg) {
 		 WarehouseInput.add(msg);
@@ -37,7 +37,8 @@ public class MsgReceiveThread<V> implements Callable<V> {
 			BufferedReader is=new BufferedReader(new InputStreamReader(remote.getInputStream()));
 			BufferedWriter os = new BufferedWriter(new OutputStreamWriter(remote.getOutputStream()))){
 			  
-			exchanger.exchange(new Info(null, 0, null, 2, null, true));			
+			ThreadRequest.add(new Info("", 0, null, 2, null, true));
+			
 		    info = new Info(remote.getInetAddress().getHostAddress(),
 		    		        remote.getPort(),
 		    		        remote.getInetAddress().getHostName(),
