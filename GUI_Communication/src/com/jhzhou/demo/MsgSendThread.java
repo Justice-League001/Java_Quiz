@@ -22,7 +22,7 @@ public class MsgSendThread<V> implements Callable<V> {
 	
 	public MsgSendThread(BlockingQueue<Info> MSG) {
 		this.MSG = MSG;
-		table = new HashMap();
+		table = new HashMap<Info, ConnectionStream>();
 	}
 	
 	private boolean checkTable(Info info) {
@@ -37,6 +37,7 @@ public class MsgSendThread<V> implements Callable<V> {
 	public V call() throws Exception {
 		BufferedWriter os;
 		Info info;
+		
 		
 		while((info = MSG.take()).STATE) {
 			if(checkTable(info) == false)

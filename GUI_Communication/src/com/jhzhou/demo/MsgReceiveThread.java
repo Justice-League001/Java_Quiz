@@ -20,7 +20,7 @@ public class MsgReceiveThread<V> implements Callable<V> {
 	private final Queue<Info> WarehouseInput;
 	private final ServerSocket connection;
 	private final Queue<Info> ThreadRequest;
-	
+	private String msg;
 	public MsgReceiveThread
 	(ServerSocket connection,  Queue<Info> WarehouseInput, Queue<Info> ThreadRequest) {
 		this.connection = connection;
@@ -37,12 +37,12 @@ public class MsgReceiveThread<V> implements Callable<V> {
 			BufferedReader is=new BufferedReader(new InputStreamReader(remote.getInputStream()));
 			BufferedWriter os = new BufferedWriter(new OutputStreamWriter(remote.getOutputStream()))){
 			  
-			ThreadRequest.add(new Info("", 0, null, 2, null, true));
+			ThreadRequest.add(new Info("", 0, null, 2, 2,null, true));
 			
 		    info = new Info(remote.getInetAddress().getHostAddress(),
 		    		        remote.getPort(),
 		    		        remote.getInetAddress().getHostName(),
-		    		        2, null,true);
+		    		        2, 2,null,true);
 		     
 					
 			receive(is);		
@@ -55,14 +55,9 @@ public class MsgReceiveThread<V> implements Callable<V> {
 		return null;
     }
     private void receive(BufferedReader is) throws IOException{	
-		String msg;
-		
 		while((msg = is.readLine()) != null) {
-			sendInfo(new Info(info.IP, 
-		              info.PORT, 
-		              info.NAME,
-		              info.PID,
-		              msg, true));
+			info.MSG = msg;
+			sendInfo(info);
 		}
 	} 
 }

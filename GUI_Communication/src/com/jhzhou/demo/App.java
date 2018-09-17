@@ -20,8 +20,8 @@ import com.jhzhou.util.Info;
 public class App {
 	static private final BlockingQueue<Info> OutputQueue = new LinkedBlockingQueue<Info>();
 	static private final Queue<Info> InputQueue = new ConcurrentLinkedQueue<Info>();
-	static private final Map<Info, SynchronousQueue<Info>> ThreadMap = 
-			                          new ConcurrentHashMap<Info, SynchronousQueue<Info>>();
+	static private final Map<Info, LinkedBlockingQueue<Info>> ThreadMap = 
+			                          new ConcurrentHashMap<Info, LinkedBlockingQueue<Info>>();
 	static private final Queue<Info> ThreadRequest = new ConcurrentLinkedQueue<Info>();
 	static private final ExecutorService pool = Executors.newCachedThreadPool();
 	
@@ -32,8 +32,8 @@ public class App {
 		final ServerSocket MsgConnection = new ServerSocket(2000);
 		Info STATE = null;
 		boolean button = true;
-		
-		GUIThread window = new GUIThread(OutputQueue, InputQueue, ThreadMap, ThreadRequest); 
+		 
+		GUI window = new GUI(OutputQueue, InputQueue, ThreadMap, ThreadRequest);
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -69,7 +69,11 @@ public class App {
 					;
 				}
 			}
-			Thread.sleep(1000);
+		
+				Thread.sleep(1000);
+			
+			
+			//未设计同步
 		}
 	}
 

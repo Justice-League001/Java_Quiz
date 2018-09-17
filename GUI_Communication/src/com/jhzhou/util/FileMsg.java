@@ -9,4 +9,16 @@ public class FileMsg {
 		this.FileName = FileName;
 		this.FileSize = FileSize;
 	}
+	@Override  
+    public Object clone() {  
+        FileMsg obj = null; 
+        
+        try{ 
+            obj = (FileMsg)super.clone(); 
+            
+        }catch(CloneNotSupportedException e) {  
+            e.printStackTrace();  
+        }  
+        return obj;  
+    }  
 }
