@@ -139,7 +139,7 @@ public class GUI {
 		lblNewLabel_1 = new JLabel();
 
 		textArea = new JTextArea();
-		textArea.setCaretPosition(textArea.getText().length());
+		textArea.setCaretPosition(textArea.getText().length()); //文本插入符位置
 		textArea.setLineWrap(true);        //激活自动换行功能 
 		textArea.setWrapStyleWord(true);  
 		textArea.setEditable(false);
@@ -544,7 +544,7 @@ public class GUI {
 		private JButton btnNewButton_1 = new JButton("取消"),btnNewButton = new JButton("确认");
 		PathDialog(JFrame owner,boolean MODE) throws IOException{
 			super(owner, "文件另存为");
-			frame = owner;
+			
 			JLabel lblNewLabel = new JLabel("Please select the installation folder");
 			add(lblNewLabel);
 
@@ -566,6 +566,12 @@ public class GUI {
 			JScrollPane scrollPane = new JScrollPane();
 			scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+			
+			
+			
+			
+			
+			
 			Path start = Paths.get(FileSystemView.getFileSystemView() .getHomeDirectory().toString());
 			FileVisitor visitor = MODE?(new FilesVisitor()):(new DirsVisitor());
 
@@ -574,8 +580,17 @@ public class GUI {
 			JTree tree = new JTree(root);
 			//			scrollPane.add(tree);
 
+			
 			tree.addTreeSelectionListener(this);
 
+			
+			
+			
+			
+			
+			
+			
+			
 			add(scrollPane);
 
 			scrollPane.setViewportView(tree);
